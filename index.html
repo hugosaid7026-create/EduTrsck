@@ -1,437 +1,317 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EduTrack — Plataforma educativa</title>
-  <meta name="description" content="Plataforma educativa para gestión y evaluación académica." />
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: {
-        colors: { primary: '#1E3A8A', accent: '#2563EB', muted: '#94A3B8', surface: '#F8FAFC' },
-        fontFamily: { sans: ['Poppins', 'ui-sans-serif', 'system-ui'] }
-      }}
-    };
-  </script>
-  <style>
-    :root { --card-radius: 14px; }
-    .focus-outline:focus { outline: 3px solid rgba(37,99,235,.25); outline-offset: 2px; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduTrack — Plataforma educativa</title>
+<meta name="description" content="Plataforma educativa para gestión y evaluación académica.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F8FAFC;--card:#fff;--tx:#1e293b;--mu:#586577;--br:#e2e8f0;--pr:#1E3A8A;--ac:#2563EB;--ok:#15803d;--wa:#b45309;--er:#dc2626}
+[data-theme=dark]{--bg:#0f172a;--card:#1e293b;--tx:#e2e8f0;--mu:#a3b1c6;--br:#334155;--pr:#93c5fd;--ac:#3b82f6}
+*{box-sizing:border-box}
+body{margin:0;font:400 15px/1.5 Poppins,system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+h1,h2,h3,h4{margin:0;font-weight:600}
+.hidden{display:none!important}
+.mu{color:var(--mu)}.sm{font-size:13px}.pr{color:var(--pr)}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{width:100%;padding:8px 12px;border:1px solid var(--br);border-radius:10px;background:var(--card);margin:4px 0 12px}
+input[type=checkbox]{width:auto;margin:0 8px 0 0}
+label{display:block;font-size:13px}
+button{cursor:pointer;padding:7px 14px;border:1px solid var(--br);border-radius:10px;background:var(--card)}
+button:hover{border-color:var(--ac)}
+.p{background:var(--ac);color:#fff;border-color:var(--ac)}.d{background:var(--er);color:#fff;border-color:var(--er)}
+:focus-visible{outline:3px solid #60a5fa;outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:18px}
+.grid{display:grid;gap:16px}.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.end{justify-content:flex-end}
+.big{font-size:32px;font-weight:600;line-height:1.2;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:500;color:var(--mu);font-size:12px;padding-bottom:8px}
+td{padding:10px 8px 10px 0;border-top:1px solid var(--br)}
+.link{background:none;border:0;padding:0;color:var(--ac);text-decoration:underline}
+.b{display:inline-block;padding:1px 10px;border-radius:99px;font-size:12px;border:1px solid currentColor}
+.Abierta{color:var(--ok)}.Borrador{color:var(--mu)}.Cerrada{color:var(--wa)}
+.bar{display:grid;grid-template-columns:120px 1fr 40px;gap:10px;align-items:center;margin:8px 0;font-size:13px}
+.bar div{background:var(--br);border-radius:99px;height:10px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+#login{max-width:440px;margin:0 auto;padding:48px 20px}
+#app{display:flex;min-height:100vh}
+#nav{width:260px;flex-shrink:0;background:var(--card);border-right:1px solid var(--br);padding:16px;position:sticky;top:0;height:100vh;overflow:auto}
+#nav button{display:flex;justify-content:space-between;width:100%;text-align:left;border:0;background:none;margin:2px 0}
+#nav button:hover,#nav [aria-current=page]{background:var(--bg)}
+#nav .sub{margin:0 0 6px 12px;padding-left:10px;border-left:2px solid var(--br)}
+#nav .sub button{padding:5px 10px;font-size:14px}
+.ar{transition:transform .15s}[aria-expanded=true] .ar{transform:rotate(90deg)}
+.mn{flex:1;min-width:0;padding:20px 24px 48px}
+header{margin-bottom:20px}
+#hb{display:none}
+.student .t{display:none!important}
+.ov{position:fixed;inset:0;background:#0007;display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.md{background:var(--card);border-radius:16px;padding:22px;width:100%;max-width:560px;max-height:90vh;overflow:auto}
+#toasts{position:fixed;bottom:16px;right:16px;z-index:60;display:grid;gap:8px}
+.ts{background:var(--pr);color:var(--bg);padding:10px 16px;border-radius:10px}
+@media(max-width:800px){
+#hb{display:inline-block}
+#nav{position:fixed;left:0;top:0;z-index:30;transform:translateX(-100%);transition:transform .2s;visibility:hidden}
+#nav.open{transform:none;visibility:visible}
+#scrim{position:fixed;inset:0;background:#0006;z-index:20}
+.mn{padding:16px}.bar{grid-template-columns:90px 1fr 36px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
-<body class="min-h-screen bg-surface text-slate-800 font-sans">
-<div id="app" class="min-h-screen">
-  <!-- LOGIN -->
-  <main id="login-screen" class="max-w-4xl mx-auto p-6 lg:p-12 flex items-center gap-8">
-    <div class="w-full lg:w-1/2">
-      <h1 class="text-3xl lg:text-4xl font-semibold text-primary mb-3">EduTrack</h1>
-      <p class="text-muted mb-6">Plataforma para seguimiento y evaluación del desempeño académico.</p>
-      <form id="login-form" class="bg-white rounded-2xl p-6 shadow-md" aria-labelledby="iniciar">
-        <h2 id="iniciar" class="text-lg font-medium mb-4">Iniciar sesión</h2>
-        <label for="email" class="block text-sm mb-2">Correo</label>
-        <input required id="email" type="email" class="w-full px-4 py-2 rounded-lg border border-slate-200 mb-4 focus-outline" placeholder="ejemplo@colegio.edu" />
-        <label for="password" class="block text-sm mb-2">Contraseña</label>
-        <input required id="password" type="password" class="w-full px-4 py-2 rounded-lg border border-slate-200 mb-4 focus-outline" placeholder="Contraseña" />
-        <label class="flex items-center gap-2 text-sm mb-4">
-          <input type="checkbox" id="asTeacher" class="focus-outline" />
-          <span>Entrar como docente</span>
-        </label>
-        <div class="flex gap-3">
-          <button type="submit" class="px-4 py-2 bg-accent text-white rounded-lg shadow-sm">Entrar</button>
-          <button type="button" id="demo-btn" class="px-4 py-2 border rounded-lg">Demo rápida</button>
-        </div>
-      </form>
-      <p class="text-xs text-muted mt-4">Usa “Demo rápida” para acceder sin crear una cuenta.</p>
-    </div>
-    <aside class="hidden lg:block lg:w-1/2">
-      <div class="bg-gradient-to-br from-primary/80 to-accent/60 text-white p-8 rounded-2xl shadow-lg">
-        <h3 class="text-2xl font-semibold mb-2">Panel de información</h3>
-        <p class="mb-4">Crea actividades, registra calificaciones, consulta el progreso de estudiantes y revisa reportes.</p>
-        <ul class="space-y-2 text-sm">
-          <li>• Panel docente con gestión de grupos</li>
-          <li>• Panel estudiante con seguimiento de tareas</li>
-          <li>• Reportes de desempeño académico</li>
-        </ul>
+<body>
+<section id="login">
+  <h1 class="pr" style="font-size:34px">EduTrack</h1>
+  <p class="mu">Seguimiento y evaluación del desempeño académico.</p>
+  <form id="lf" class="card" novalidate>
+    <h2 style="font-size:18px;margin-bottom:12px">Iniciar sesión</h2>
+    <label>Correo<input id="email" type="email" required autocomplete="email" placeholder="ejemplo@colegio.edu"></label>
+    <label>Contraseña<input id="pw" type="password" required minlength="6" autocomplete="current-password" placeholder="Mínimo 6 caracteres"></label>
+    
+    <p id="lerr" class="sm" style="color:var(--er)" role="alert"></p>
+    <div class="row" style="justify-content:flex-start"><button class="p">Entrar</button><button type="button" data-act="signup">Crear cuenta</button></div>
+  </form>
+  <p class="sm mu">Las cuentas nuevas son de estudiante. El administrador asigna el rol docente.</p>
+</section>
+
+<div id="app" class="hidden">
+  <div id="scrim" class="hidden" data-act="menu"></div>
+  <nav id="nav" aria-label="Principal">
+    <div style="margin-bottom:18px"><h2 class="pr" style="font-size:20px">EduTrack</h2><p class="sm mu" style="margin:0">Proyect-UAEH · Demo</p></div>
+    <button data-act="nav" data-id="dashboard">🏠 Dashboard</button>
+    <button data-act="tog" data-id="s1" aria-expanded="false" aria-controls="s1">📚 Cursos <span class="ar">▸</span></button>
+    <div id="s1" class="sub hidden"><button data-act="nav" data-id="courses">Mis cursos</button><button class="t" data-act="newCourse">Nuevo curso</button></div>
+    <button data-act="tog" data-id="s2" aria-expanded="false" aria-controls="s2">📝 Actividades <span class="ar">▸</span></button>
+    <div id="s2" class="sub hidden"><button data-act="nav" data-id="assignments">Todas las actividades</button><button class="t" data-act="newAssign">Crear actividad</button></div>
+    <button data-act="tog" data-id="s3" aria-expanded="false" aria-controls="s3">📊 Reportes <span class="ar">▸</span></button>
+    <div id="s3" class="sub hidden"><button data-act="nav" data-id="reports">Desempeño académico</button><button data-act="csv">Exportar CSV</button></div>
+    <button data-act="tog" data-id="s4" aria-expanded="false" aria-controls="s4">⚙️ Ajustes <span class="ar">▸</span></button>
+    <div id="s4" class="sub hidden"><button data-act="settings">Configuración</button><button data-act="profile">Mi perfil</button></div>
+  </nav>
+  <div class="mn">
+    <header class="row">
+      <div class="row" style="justify-content:flex-start">
+        <button id="hb" data-act="menu" aria-label="Abrir menú">☰</button>
+        <div><h1 id="title" style="font-size:24px">Dashboard</h1><p class="sm mu" style="margin:0">Bienvenido, <span id="uname"></span> · <strong id="urole"></strong></p></div>
       </div>
-    </aside>
-  </main>
-
-  <!-- DASHBOARD -->
-  <section id="dashboard-screen" class="hidden">
-    <div class="flex min-h-screen">
-      <!-- MENÚ LATERAL DESPLEGABLE EN FORMA DE ESCALERA -->
-      <nav class="w-64 bg-white border-r p-4 hidden md:block shrink-0">
-        <div class="mb-6">
-          <h2 class="text-xl font-semibold text-primary">Proyect-UAEH</h2>
-          <p class="text-sm text-muted">Centro educativo - Demo</p>
-        </div>
-        <div class="space-y-2 text-sm">
-          <button data-route="dashboard" class="w-full text-left p-3 rounded-lg hover:bg-blue-50 flex items-center gap-2">
-            <span>🏠</span> Dashboard
-          </button>
-
-          <button type="button" onclick="toggleMenu('submenu-cursos','arrow-cursos')" class="w-full text-left p-3 rounded-lg hover:bg-blue-50 flex justify-between items-center">
-            <span>📚 Cursos</span><span id="arrow-cursos">▸</span>
-          </button>
-          <div id="submenu-cursos" class="hidden ml-4 pl-3 border-l-2 border-blue-200 space-y-1">
-            <button onclick="navigate('courses'); renderCourses()" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Mis cursos</button>
-            <button onclick="abrirNuevoCurso()" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Nuevo curso</button>
-            <button onclick="navigate('courses'); renderCourses()" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Grupos</button>
-          </div>
-
-          <button type="button" onclick="toggleMenu('submenu-actividades','arrow-actividades')" class="w-full text-left p-3 rounded-lg hover:bg-blue-50 flex justify-between items-center">
-            <span>📝 Actividades</span><span id="arrow-actividades">▸</span>
-          </button>
-          <div id="submenu-actividades" class="hidden ml-4 pl-3 border-l-2 border-blue-200 space-y-1">
-            <button data-route="assignments" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Todas las actividades</button>
-            <button onclick="navigate('assignments'); document.getElementById('new-assignment').click()" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Crear actividad</button>
-          </div>
-
-          <button type="button" onclick="toggleMenu('submenu-reportes','arrow-reportes')" class="w-full text-left p-3 rounded-lg hover:bg-blue-50 flex justify-between items-center">
-            <span>📊 Reportes</span><span id="arrow-reportes">▸</span>
-          </button>
-          <div id="submenu-reportes" class="hidden ml-4 pl-3 border-l-2 border-blue-200 space-y-1">
-            <button data-route="reports" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Desempeño académico</button>
-            <button onclick="navigate('reports')" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Exportar reportes</button>
-          </div>
-
-          <button type="button" onclick="toggleMenu('submenu-ajustes','arrow-ajustes')" class="w-full text-left p-3 rounded-lg hover:bg-blue-50 flex justify-between items-center">
-            <span>⚙️ Ajustes</span><span id="arrow-ajustes">▸</span>
-          </button>
-          <div id="submenu-ajustes" class="hidden ml-4 pl-3 border-l-2 border-blue-200 space-y-1">
-            <button onclick="alert('Configuración de EduTrack (demo)')" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Configuración</button>
-            <button onclick="alert('Perfil del usuario (demo)')" class="w-full text-left p-2 rounded-lg hover:bg-blue-50">└ Mi perfil</button>
-          </div>
-        </div>
-      </nav>
-
-      <main class="flex-1 min-w-0 p-6 lg:p-10">
-        <header class="flex items-center justify-between mb-6 gap-4">
-          <div>
-            <h1 id="view-title" class="text-2xl font-semibold">Dashboard</h1>
-            <p id="view-sub" class="text-sm text-muted">Bienvenido, <span id="user-name">Docente</span></p>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="text-sm text-muted hidden sm:block">Rol: <strong id="user-role">Docente</strong></div>
-            <button id="signout" class="px-3 py-1 border rounded-lg">Cerrar sesión</button>
-          </div>
-        </header>
-
-        <section id="route-dashboard">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div class="bg-white p-4 rounded-2xl shadow-sm"><h3 class="font-medium">Alumnos</h3><p class="text-3xl font-semibold mt-2">120</p><p class="text-xs text-muted mt-1">Total en esta escuela</p></div>
-            <div class="bg-white p-4 rounded-2xl shadow-sm"><h3 class="font-medium">Actividades</h3><p class="text-3xl font-semibold mt-2">34</p><p class="text-xs text-muted mt-1">Publicadas este semestre</p></div>
-            <div class="bg-white p-4 rounded-2xl shadow-sm"><h3 class="font-medium">Promedio general</h3><p class="text-3xl font-semibold mt-2">8.4</p><p class="text-xs text-muted mt-1">Escala 0-10</p></div>
-          </div>
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm">
-              <div class="flex items-center justify-between mb-4"><h3 class="font-medium">Tareas recientes</h3><button class="text-sm text-accent" id="new-assignment">+ Crear actividad</button></div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-sm border-collapse" aria-label="Tareas recientes">
-                  <thead class="text-xs text-muted"><tr><th class="text-left pb-2">Título</th><th class="text-left pb-2">Curso</th><th class="text-left pb-2">Entrega</th><th class="text-left pb-2">Estado</th></tr></thead>
-                  <tbody id="assignments-list"></tbody>
-                </table>
-              </div>
-            </div>
-            <aside class="bg-white p-6 rounded-2xl shadow-sm"><h3 class="font-medium mb-3">Resumen por grupo</h3><ul id="groups-summary" class="space-y-3 text-sm text-muted"></ul></aside>
-          </div>
-        </section>
-
-        <section id="route-assignments" class="hidden">
-          <div class="bg-white p-6 rounded-2xl shadow-sm">
-            <div class="flex items-center justify-between mb-4 gap-3"><h3 class="font-medium">Todas las actividades</h3><input id="search-assign" placeholder="Buscar actividad..." class="px-3 py-2 border rounded-lg w-64 max-w-full focus-outline" /></div>
-            <div id="assign-cards" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-          </div>
-        </section>
-
-        <section id="route-reports" class="hidden">
-          <div class="bg-white p-6 rounded-2xl shadow-sm">
-            <h3 class="font-medium mb-4">Reportes de desempeño</h3>
-            <p class="text-sm text-muted mb-4">Consulta datos de desempeño por curso.</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="p-4 border rounded-lg"><p class="text-xs text-muted">Exportar</p><button id="export-csv" class="mt-2 px-3 py-2 border rounded-lg">Descargar CSV</button></div>
-              <div class="p-4 border rounded-lg"><p class="text-xs text-muted">Filtrar por curso</p><select id="report-course" class="w-full mt-2 px-3 py-2 border rounded-lg"><option>Todos</option><option>Matemáticas</option><option>Comunicación</option></select></div>
-              <div class="p-4 border rounded-lg"><p class="text-xs text-muted">Fecha de consulta</p><input type="date" class="mt-2 px-3 py-2 border rounded-lg w-full" /></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="route-courses" class="hidden">
-          <div class="bg-white p-6 rounded-2xl shadow-sm">
-            <div class="flex items-center justify-between mb-4 gap-3"><h3 class="font-medium text-lg">Mis cursos</h3><button id="add-course" class="px-3 py-2 bg-accent text-white rounded-lg text-sm">+ Nuevo curso</button></div>
-            <div id="courses-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-          </div>
-        </section>
-      </main>
-    </div>
-  </section>
-  <div id="modal-root"></div>
+      <div class="row"><button data-act="theme" aria-label="Cambiar tema">🌓</button><button data-act="out">Cerrar sesión</button></div>
+    </header>
+    <main id="view" tabindex="-1"></main>
+  </div>
 </div>
+<div id="modal"></div>
+<div id="toasts" aria-live="polite"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-const demoAssignments = [
-  { id: 1, title: 'Examen Diagnóstico', course: 'Matemáticas', due: '2025-11-10', status: 'Publicado' },
-  { id: 2, title: 'Proyecto lectura', course: 'Comunicación', due: '2025-11-18', status: 'Borrador' },
-  { id: 3, title: 'Taller - Álgebra', course: 'Matemáticas', due: '2025-11-05', status: 'Publicado' }
-];
-const demoGroups = [{ name: '1° A', avg: 8.6 }, { name: '2° B', avg: 7.9 }, { name: '3° C', avg: 8.1 }];
-const loginScreen = document.getElementById('login-screen');
-const dashboardScreen = document.getElementById('dashboard-screen');
-const userNameEl = document.getElementById('user-name');
-const userRoleEl = document.getElementById('user-role');
+/* ===== ESTADO ÚNICO (Supabase) ===== */
+const SUPABASE_URL='https://tdxqygfcinbwmfiehirl.supabase.co',SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkeHF5Z2ZjaW5id21maWVoaXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2MjExNzQsImV4cCI6MjEwODE5NzE3NH0.JajOOEVCsZWMB9iYJG5-XZMqpeZ8Ks1_OjweQ3dA4RU';
+const KEY='edutrack:ui',$=s=>document.querySelector(s);
+let db=null,dbErr='';
+try{db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)}catch(e){dbErr=window.supabase?'La URL o la clave de Supabase no son válidas. Revisa que las pegaste completas, entre comillas.':'No cargó la librería de Supabase. Revisa tu conexión a internet.'}
+const dayStr=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const ui=(()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}})();
+let S={session:null,theme:ui.theme||null,route:ui.route||'dashboard',courses:[],students:[],assignments:[],grades:{}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({theme:S.theme,route:S.route}))}catch(e){}};
+const uid=()=>Date.now()+Math.floor(Math.random()*1000);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isT=()=>S.session?.role==='teacher';
+const cname=id=>S.courses.find(c=>c.id===id)?.nombre||'—';
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const fmt=n=>n==null?'—':n.toFixed(1);
+const gOf=aid=>Object.values(S.grades[aid]||{});
+const aAvg=aid=>avg(gOf(aid));
+const cAvg=cid=>avg(S.assignments.filter(a=>a.courseId===cid).flatMap(a=>gOf(a.id)));
+const status=a=>a.status==='Borrador'?'Borrador':a.due<dayStr(0)?'Cerrada':'Abierta';
+const myCids=()=>isT()?S.courses.map(c=>c.id):S.students.map(s=>s.courseId);
+const myGrade=a=>{const s=S.students.find(x=>x.courseId===a.courseId);return s?(S.grades[a.id]||{})[s.id]:undefined};
+const vCourses=()=>S.courses.filter(c=>myCids().includes(c.id));
+const vAssign=()=>S.assignments.filter(a=>myCids().includes(a.courseId)&&(isT()||a.status==='Publicado'));
+const commit=msg=>{save();closeModal();render();if(msg)toast(msg)};
+async function load(){
+  const r=await Promise.all(['courses','students','assignments','grades'].map(t=>db.from(t).select('*')));
+  const bad=r.find(x=>x.error);if(bad)return toast('Error al cargar datos: '+bad.error.message);
+  const[c,st,as,g]=r.map(x=>x.data);
+  S.courses=c;S.students=st.map(x=>({id:x.id,nombre:x.nombre,email:x.email,courseId:x.course_id}));
+  S.assignments=as.map(x=>({id:x.id,title:x.title,courseId:x.course_id,due:x.due,status:x.status}));
+  S.grades={};g.forEach(x=>(S.grades[x.assignment_id]??={})[x.student_id]=Number(x.nota));
+}
+async function run(p,msg){const{error}=await p;if(error)return toast('Error: '+error.message);await load();commit(msg)}
 
-function showDashboard(asTeacher = true) {
-  loginScreen.classList.add('hidden');
-  dashboardScreen.classList.remove('hidden');
-  userNameEl.textContent = asTeacher ? 'Prof. García' : 'Alumno: María';
-  userRoleEl.textContent = asTeacher ? 'Docente' : 'Estudiante';
-  renderAssignments();
-  renderGroups();
-  renderCourses();
-  navigate('dashboard');
+/* ===== UI BASE ===== */
+function toast(m){const t=document.createElement('div');t.className='ts';t.textContent=m;$('#toasts').append(t);setTimeout(()=>t.remove(),3200)}
+let lastFocus;
+function modal(title,body,mount){
+  closeModal(false);lastFocus=document.activeElement;
+  $('#modal').innerHTML=`<div class="ov"><div class="md" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="row"><h2 id="mt" style="font-size:18px">${esc(title)}</h2><button data-act="close" aria-label="Cerrar">✕</button></div><div style="margin-top:12px">${body}</div></div></div>`;
+  mount?.($('#modal'));
+  ($('#modal input,#modal select,#modal textarea')||$('#modal .p')||$('#modal button')).focus();
 }
-function renderAssignments() {
-  const tbody = document.getElementById('assignments-list');
-  tbody.innerHTML = '';
-  demoAssignments.forEach(a => {
-    const tr = document.createElement('tr');
-    tr.className = 'align-top border-t';
-    tr.innerHTML = `<td class="py-3 pr-4"><button class="text-accent underline" data-id="${a.id}">${a.title}</button></td><td class="py-3 pr-4">${a.course}</td><td class="py-3 pr-4">${a.due}</td><td class="py-3 pr-4 text-sm text-muted">${a.status}</td>`;
-    tbody.appendChild(tr);
-  });
-  tbody.querySelectorAll('button[data-id]').forEach(btn => btn.addEventListener('click', () => openAssignment(btn.dataset.id)));
+function closeModal(back=true){$('#modal').innerHTML='';if(back)lastFocus?.focus?.()}
+function formModal(title,fields,onSubmit,label='Guardar'){
+  modal(title,`<form id="f">${fields}<div class="row end"><button type="button" data-act="close">Cancelar</button><button class="p">${label}</button></div></form>`,r=>
+    r.querySelector('#f').addEventListener('submit',e=>{e.preventDefault();const err=onSubmit(new FormData(e.target));if(err)toast(err)}));
 }
-function renderGroups() {
-  const ul = document.getElementById('groups-summary');
-  ul.innerHTML = '';
-  demoGroups.forEach(g => {
-    const li = document.createElement('li');
-    li.innerHTML = `<div class="flex items-center justify-between"><div><strong>${g.name}</strong><div class="text-xs text-muted">Promedio: ${g.avg}</div></div><div class="text-xs">Grupo</div></div>`;
-    ul.appendChild(li);
-  });
-}
-function navigate(route) {
-  document.querySelectorAll('section[id^="route-"]').forEach(s => s.classList.add('hidden'));
-  const target = document.getElementById('route-' + route);
-  if (target) target.classList.remove('hidden');
-  document.querySelectorAll('[data-route]').forEach(b => {
-    b.classList.toggle('bg-surface', b.dataset.route === route);
-  });
-  document.getElementById('view-title').textContent = ({ dashboard: 'Dashboard', courses: 'Cursos', assignments: 'Actividades', reports: 'Reportes' })[route] || route;
-}
-function toggleMenu(menuId, arrowId) {
-  const submenu = document.getElementById(menuId);
-  const arrow = document.getElementById(arrowId);
-  submenu.classList.toggle('hidden');
-  arrow.textContent = submenu.classList.contains('hidden') ? '▸' : '▾';
-}
-function openAssignment(id) {
-  const a = demoAssignments.find(x => x.id == id);
-  if (!a) return;
-  const modalRoot = document.getElementById('modal-root');
-  modalRoot.innerHTML = `
-    <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
-      <div class="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-lg">
-        <div class="flex items-start justify-between mb-4"><div><h3 class="text-lg font-semibold">${a.title}</h3><p class="text-sm text-muted">Curso: ${a.course} • Entrega: ${a.due}</p></div><button onclick="cerrarModal()" aria-label="Cerrar">✕</button></div>
-        <p class="text-sm text-muted mb-4">Descripción de la actividad y criterios de evaluación.</p>
-        <div class="flex gap-3 justify-end"><button id="grade-btn" class="px-4 py-2 bg-accent text-white rounded-lg">Registrar calificaciones</button><button onclick="cerrarModal()" class="px-4 py-2 border rounded-lg">Cerrar</button></div>
-      </div>
-    </div>`;
-  document.getElementById('grade-btn').addEventListener('click', () => openGradeSheet(a.id));
-}
-function openGradeSheet(assignId) {
-  const modalRoot = document.getElementById('modal-root');
-  modalRoot.innerHTML = `
-    <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
-      <div class="bg-white rounded-2xl p-6 w-full max-w-3xl shadow-lg">
-        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold">Registro de calificaciones - Actividad ${assignId}</h3><button onclick="cerrarModal()">✕</button></div>
-        <table class="w-full text-sm mb-4"><tbody>
-          <tr class="border-t"><td class="py-2">María López</td><td class="py-2"><input type="number" min="0" max="10" value="9" class="w-20 px-2 py-1 border rounded-lg grade-value"></td></tr>
-          <tr class="border-t"><td class="py-2">Carlos Pérez</td><td class="py-2"><input type="number" min="0" max="10" value="8" class="w-20 px-2 py-1 border rounded-lg grade-value"></td></tr>
-        </tbody></table>
-        <div class="flex gap-3 justify-end"><button id="save-grades" class="px-4 py-2 bg-primary text-white rounded-lg">Guardar</button><button onclick="cerrarModal()" class="px-4 py-2 border rounded-lg">Cancelar</button></div>
-      </div>
-    </div>`;
-  document.getElementById('save-grades').addEventListener('click', () => {
-    const grades = [...document.querySelectorAll('.grade-value')];
-    if (grades.some(input => input.value === '' || Number(input.value) < 0 || Number(input.value) > 10)) {
-      alert('Ingresa calificaciones entre 0 y 10.');
-      return;
-    }
-    alert('Calificaciones guardadas (demo).');
-    cerrarModal();
-  });
-}
-document.getElementById('login-form').addEventListener('submit', e => {
-  e.preventDefault();
-  showDashboard(document.getElementById('asTeacher').checked);
+const fld=(l,n,v='',a='')=>`<label>${l}<input name="${n}" value="${esc(v)}" ${a}></label>`;
+document.addEventListener('keydown',e=>{
+  if(!$('#modal .md'))return;
+  if(e.key==='Escape')return closeModal();
+  if(e.key==='Tab'){const f=[...$('#modal .md').querySelectorAll('button,input,select,textarea')].filter(x=>!x.disabled);
+    if(!f.length)return;const i=f.indexOf(document.activeElement);
+    if(e.shiftKey&&i<=0){e.preventDefault();f.at(-1).focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}
 });
-document.getElementById('demo-btn').addEventListener('click', () => showDashboard(true));
-document.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => {
-  navigate(btn.dataset.route);
-  if (btn.dataset.route === 'courses') renderCourses();
-}));
-document.getElementById('signout').addEventListener('click', () => {
-  dashboardScreen.classList.add('hidden');
-  loginScreen.classList.remove('hidden');
-  cerrarModal();
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('ov'))return closeModal();
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const v=b.dataset.id;A[b.dataset.act]?.(/^\d+$/.test(v||'')?+v:v,b);
 });
-document.getElementById('new-assignment').addEventListener('click', () => alert('La creación de actividades está en modo demostración.'));
-function populateAssignCards() {
-  const container = document.getElementById('assign-cards');
-  container.innerHTML = '';
-  demoAssignments.forEach(a => {
-    const card = document.createElement('div');
-    card.className = 'p-4 border rounded-lg bg-white';
-    card.innerHTML = `<h4 class="font-medium">${a.title}</h4><p class="text-xs text-muted">${a.course} • Entrega: ${a.due}</p><div class="mt-3"><button class="px-3 py-1 border rounded-lg" onclick="openAssignment(${a.id})">Abrir</button></div>`;
-    container.appendChild(card);
-  });
-}
-document.getElementById('search-assign').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  document.querySelectorAll('#assign-cards > div').forEach(card => {
-    card.classList.toggle('hidden', !card.textContent.toLowerCase().includes(q));
-  });
-});
-document.getElementById('export-csv').addEventListener('click', () => {
-  const rows = [['Actividad', 'Curso', 'Entrega', 'Estado'], ...demoAssignments.map(a => [a.title, a.course, a.due, a.status])];
-  const csv = rows.map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'reporte-edutrack.csv'; a.click();
-  URL.revokeObjectURL(url);
-});
-populateAssignCards();
 
-/* GESTIÓN DE CURSOS: guarda los datos en el navegador con localStorage */
-let courses;
-try {
-  courses = JSON.parse(localStorage.getItem('courses')) || [
-    { id: 1, nombre: 'Matemáticas I', grupo: '1° A', alumnos: 28, descripcion: 'Álgebra básica' },
-    { id: 2, nombre: 'Comunicación', grupo: '2° B', alumnos: 25, descripcion: 'Lectura y redacción' }
-  ];
-} catch (error) {
-  courses = [
-    { id: 1, nombre: 'Matemáticas I', grupo: '1° A', alumnos: 28, descripcion: 'Álgebra básica' },
-    { id: 2, nombre: 'Comunicación', grupo: '2° B', alumnos: 25, descripcion: 'Lectura y redacción' }
-  ];
+/* ===== VISTAS ===== */
+const badge=a=>`<span class="b ${status(a)}">${status(a)}</span>`;
+const views={
+dashboard:{t:'Dashboard',f(){
+  const as=vAssign(),cs=vCourses();
+  const al=isT()?S.students.length:cs.length;
+  const prom=isT()?avg(Object.values(S.grades).flatMap(g=>Object.values(g))):avg(as.flatMap(a=>{const g=myGrade(a);return g==null?[]:[g]}));
+  const st=(t,n,s)=>`<div class="card"><h3 style="font-size:15px;font-weight:500">${t}</h3><p class="big">${n}</p><p class="sm mu" style="margin:0">${s}</p></div>`;
+  const rows=[...as].sort((a,b)=>b.due.localeCompare(a.due)).slice(0,5).map(a=>`<tr><td><button class="link" data-act="openAssign" data-id="${a.id}">${esc(a.title)}</button></td><td>${esc(cname(a.courseId))}</td><td>${a.due}</td><td>${badge(a)}</td></tr>`).join('');
+  return `<div class="grid g3" style="margin-bottom:16px">${st(isT()?'Alumnos':'Mis cursos',al,isT()?'En tus cursos':'Inscritos')+st('Actividades',as.length,isT()?`${as.filter(a=>a.status==='Publicado').length} publicadas`:'Publicadas para ti')+st(isT()?'Promedio general':'Mi promedio',fmt(prom),'Escala 0-10')}</div>
+  <div class="grid g2"><div class="card"><div class="row" style="margin-bottom:10px"><h3>Tareas recientes</h3><button class="link t" data-act="newAssign">+ Crear actividad</button></div>${rows?`<div style="overflow-x:auto"><table><thead><tr><th scope="col">Título</th><th scope="col">Curso</th><th scope="col">Entrega</th><th scope="col">Estado</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<p class="mu">Aún no hay actividades.</p>'}</div>
+  <div class="card"><h3 style="margin-bottom:10px">Resumen por grupo</h3>${cs.length?cs.map(c=>`<p style="margin:0 0 10px"><strong>${esc(c.grupo)}</strong> · ${esc(c.nombre)}<br><span class="sm mu">Promedio: ${fmt(cAvg(c.id))} · ${S.students.filter(s=>s.courseId===c.id).length} alumnos</span></p>`).join(''):'<p class="mu">Sin cursos todavía.</p>'}</div></div>`}},
+courses:{t:'Cursos',f(){
+  const cs=vCourses();
+  return `<div class="card"><div class="row" style="margin-bottom:14px"><h3>Mis cursos</h3><button class="p t" data-act="newCourse">+ Nuevo curso</button></div>
+  <div class="grid g3">${cs.length?cs.map(c=>`<div class="card"><h4 class="pr">${esc(c.nombre)}</h4><p class="sm mu" style="margin:0">Grupo: ${esc(c.grupo)} · ${S.students.filter(s=>s.courseId===c.id).length} alumnos</p><p style="margin:8px 0">${esc(c.descripcion)}</p><div class="row" style="justify-content:flex-start"><button data-act="viewCourse" data-id="${c.id}">Ver</button><button class="p t" data-act="editCourse" data-id="${c.id}">Editar</button><button class="d t" data-act="delCourse" data-id="${c.id}">Eliminar</button></div></div>`).join(''):'<p class="mu">Todavía no hay cursos. Usa “Nuevo curso” para agregar uno.</p>'}</div></div>`}},
+assignments:{t:'Actividades',f(){
+  const as=vAssign();
+  return `<div class="card"><div class="row" style="margin-bottom:14px"><h3>Todas las actividades</h3><div class="row"><input id="q" placeholder="Buscar actividad..." aria-label="Buscar actividad" style="margin:0;width:220px"><button class="p t" data-act="newAssign">+ Crear</button></div></div>
+  <div id="ac" class="grid g2">${as.map(a=>`<div class="card" data-s="${esc((a.title+' '+cname(a.courseId)).toLowerCase())}"><h4>${esc(a.title)}</h4><p class="sm mu" style="margin:2px 0 10px">${esc(cname(a.courseId))} · Entrega: ${a.due} ${badge(a)}</p><button data-act="openAssign" data-id="${a.id}">Abrir</button></div>`).join('')}</div>
+  <p id="none" class="mu ${as.length?'hidden':''}">No hay actividades que mostrar.</p></div>`},
+  m(){$('#q').addEventListener('input',e=>{const q=e.target.value.toLowerCase();let n=0;document.querySelectorAll('#ac>[data-s]').forEach(c=>{const h=!c.dataset.s.includes(q);c.classList.toggle('hidden',h);if(!h)n++});$('#none').classList.toggle('hidden',n>0||!$('#ac').children.length&&false)})}},
+reports:{t:'Reportes',f(){
+  return `<div class="card" style="margin-bottom:16px"><h3 style="margin-bottom:10px">Reportes de desempeño</h3><div class="grid g3"><label>Curso<select id="rc"><option value="">Todos</option>${vCourses().map(c=>`<option value="${c.id}" ${rf.c==c.id?'selected':''}>${esc(c.nombre)}</option>`).join('')}</select></label><label>Entrega desde<input type="date" id="rd" value="${rf.from}"></label><div style="align-self:end;margin-bottom:12px"><button class="p" data-act="csv">Descargar CSV</button></div></div></div><div id="rep">${repBody()}</div>`},
+  m(){const u=()=>{rf.c=$('#rc').value;rf.from=$('#rd').value;$('#rep').innerHTML=repBody()};$('#rc').addEventListener('change',u);$('#rd').addEventListener('change',u)}}
+};
+const rf={c:'',from:''};
+const repRows=()=>vAssign().filter(a=>(!rf.c||a.courseId==rf.c)&&(!rf.from||a.due>=rf.from)).sort((a,b)=>a.due.localeCompare(b.due)).map(a=>[a.title,cname(a.courseId),a.due,status(a),isT()?aAvg(a.id):myGrade(a)]);
+function repBody(){
+  const rows=repRows(),bars=vCourses().filter(c=>!rf.c||c.id==rf.c);
+  return `<div class="card" style="margin-bottom:16px"><h3 style="margin-bottom:6px">Promedio por curso</h3>${bars.map(c=>{const v=cAvg(c.id);return `<div class="bar"><span>${esc(c.nombre)}</span><div><i style="width:${(v||0)*10}%"></i></div><b>${fmt(v)}</b></div>`}).join('')||'<p class="mu">Sin cursos.</p>'}</div>
+  <div class="card" style="overflow-x:auto">${rows.length?`<table><thead><tr><th scope="col">Actividad</th><th scope="col">Curso</th><th scope="col">Entrega</th><th scope="col">Estado</th><th scope="col">${isT()?'Promedio':'Mi nota'}</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${r[2]}</td><td>${r[3]}</td><td>${fmt(r[4]??null)}</td></tr>`).join('')}</tbody></table>`:'<p class="mu">No hay datos con estos filtros.</p>'}</div>`;
 }
-function saveCourses() { localStorage.setItem('courses', JSON.stringify(courses)); }
-function renderCourses() {
-  const container = document.getElementById('courses-container');
-  if (!container) return;
-  container.innerHTML = '';
-  if (!courses.length) {
-    container.innerHTML = '<p class="text-sm text-muted">Todavía no hay cursos. Usa “Nuevo curso” para agregar uno.</p>';
-    return;
+
+function render(){
+  const on=!!S.session;
+  document.documentElement.dataset.theme=S.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  $('#login').classList.toggle('hidden',on);$('#app').classList.toggle('hidden',!on);
+  if(!on)return;
+  document.body.classList.toggle('student',!isT());
+  $('#uname').textContent=S.session.name;$('#urole').textContent=isT()?'Docente':'Estudiante';
+  if(!views[S.route])S.route='dashboard';
+  const R=views[S.route];$('#title').textContent=R.t;$('#view').innerHTML=R.f();R.m?.();
+  document.querySelectorAll('[data-act=nav]').forEach(b=>b.setAttribute('aria-current',b.dataset.id===S.route?'page':'false'));
+}
+
+/* ===== ACCIONES ===== */
+const closeMenu=()=>{$('#nav').classList.remove('open');$('#scrim').classList.add('hidden')};
+const need=()=>isT()||(toast('Solo el docente puede hacer esto.'),false);
+const A={
+  nav(r){S.route=r;save();closeMenu();render()},
+  tog(id,b){const h=document.getElementById(id).classList.toggle('hidden');b.setAttribute('aria-expanded',!h)},
+  menu(){const o=$('#nav').classList.toggle('open');$('#scrim').classList.toggle('hidden',!o)},
+  close(){closeModal()},
+  theme(){S.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';save();render()},
+  
+  async out(){await db.auth.signOut();Object.assign(S,{session:null,courses:[],students:[],assignments:[],grades:{}});closeModal(false);closeMenu();$('#lf').reset();render()},
+  newCourse(){need()&&courseForm()},editCourse(id){need()&&courseForm(id)},
+  delCourse(id){if(!need())return;const c=S.courses.find(x=>x.id===id);
+    if(c&&confirm(`¿Eliminar el curso "${c.nombre}" con sus alumnos, actividades y calificaciones?`)){
+      
+      run(db.from('courses').delete().eq('id',id),'Curso eliminado')}},
+  viewCourse(id){const c=S.courses.find(x=>x.id===id);if(!c)return;const st=S.students.filter(s=>s.courseId===id);
+    modal(c.nombre,`<p class="sm mu">Grupo: ${esc(c.grupo)}</p><p>${esc(c.descripcion)}</p><h3 style="font-size:15px;margin:12px 0 6px">Alumnos (${st.length})</h3>
+    ${st.length?`<ul style="padding:0;list-style:none;margin:0">${st.map(s=>`<li class="row" style="padding:4px 0">${esc(s.nombre)}${isT()?`<button class="d" data-act="delStu" data-id="${s.id}" aria-label="Quitar a ${esc(s.nombre)}">Quitar</button>`:''}</li>`).join('')}</ul>`:'<p class="mu">Aún no hay alumnos en este curso.</p>'}
+    ${isT()?`<div class="row" style="margin-top:12px"><input id="ns" placeholder="Nombre del alumno" maxlength="80" aria-label="Nombre del alumno" style="margin:0"><input id="se" type="email" placeholder="Correo (para su acceso)" aria-label="Correo del alumno" style="margin:0"><button class="p" data-act="addStu" data-id="${id}">Agregar</button></div>`:''}`)},
+  addStu(id){if(!need())return;const n=$('#ns').value.trim();if(!n)return toast('Escribe el nombre del alumno.');
+    const em=$('#se').value.trim().toLowerCase()||null;run(db.from('students').insert({nombre:n,course_id:id,email:em}),null).then(()=>A.viewCourse(id))},
+  delStu(id){if(!need())return;const s=S.students.find(x=>x.id===id);if(!s)return;
+    run(db.from('students').delete().eq('id',id),null).then(()=>A.viewCourse(s.courseId))},
+  newAssign(){need()&&assignForm()},editAssign(id){need()&&assignForm(id)},
+  delAssign(id){if(!need())return;const a=S.assignments.find(x=>x.id===id);
+    if(a&&confirm(`¿Eliminar la actividad "${a.title}" y sus calificaciones?`)){run(db.from('assignments').delete().eq('id',id),'Actividad eliminada')}},
+  openAssign(id){const a=S.assignments.find(x=>x.id===id);if(!a)return;
+    const mine=myGrade(a);
+    modal(a.title,`<p class="sm mu">Curso: ${esc(cname(a.courseId))} · Entrega: ${a.due} ${badge(a)}</p>
+    <p>${isT()?`Promedio del grupo: <strong>${fmt(aAvg(id))}</strong> (${gOf(id).length} calificaciones)`:`Mi calificación: <strong>${fmt(mine??null)}</strong>`}</p>
+    ${isT()?`<div class="row end"><button class="d" data-act="delAssign" data-id="${id}">Eliminar</button><button data-act="editAssign" data-id="${id}">Editar</button><button class="p" data-act="grade" data-id="${id}">Registrar calificaciones</button></div>`:''}`)},
+  grade(id){if(!need())return;const a=S.assignments.find(x=>x.id===id);if(!a)return;
+    const st=S.students.filter(s=>s.courseId===a.courseId),g=S.grades[id]||{};
+    if(!st.length)return modal('Calificaciones',`<p class="mu">Este curso no tiene alumnos. Agrégalos desde “Ver” en Mis cursos.</p>`);
+    formModal('Calificaciones · '+a.title,`<table><tbody>${st.map(s=>`<tr><td>${esc(s.nombre)}</td><td><input type="number" name="${s.id}" min="0" max="10" step="0.1" value="${g[s.id]??''}" aria-label="Nota de ${esc(s.nombre)}" style="width:90px;margin:0"></td></tr>`).join('')}</tbody></table><p class="sm mu">Deja vacío si aún no hay nota (0 a 10).</p>`,f=>{
+      const out={};for(const s of st){const v=f.get(String(s.id));if(v==='')continue;const n=Number(v);if(!(n>=0&&n<=10))return 'Ingresa calificaciones entre 0 y 10.';out[s.id]=n}
+      const rows=Object.entries(out).map(([sid,n])=>({assignment_id:id,student_id:+sid,nota:n}));
+      const clear=st.map(x=>x.id).filter(x=>!(x in out));
+      (async()=>{if(clear.length){const r=await db.from('grades').delete().eq('assignment_id',id).in('student_id',clear);if(r.error)return toast(r.error.message)}
+        run(rows.length?db.from('grades').upsert(rows):Promise.resolve({}),'Calificaciones guardadas')})()})},
+  csv(){const q=s=>`"${String(s??'').replace(/^[=+\-@]/,"'$&").replace(/"/g,'""')}"`;
+    const rows=[['Actividad','Curso','Entrega','Estado',isT()?'Promedio':'Mi nota'],...repRows().map(r=>[...r.slice(0,4),r[4]==null?'':r[4].toFixed(1)])];
+    const u=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(q).join(',')).join('\n')],{type:'text/csv;charset=utf-8'}));
+    const a=document.createElement('a');a.href=u;a.download='reporte-edutrack.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),500);toast('CSV descargado')},
+  profile(){modal('Mi perfil',`<p><strong>${esc(S.session.name)}</strong></p><p class="mu">${esc(S.session.email)}<br>Rol: ${isT()?'Docente':'Estudiante'}</p>`)},
+  settings(){modal('Configuración',`<label>Tema<select id="th"><option value="">Automático</option><option value="light" ${S.theme==='light'?'selected':''}>Claro</option><option value="dark" ${S.theme==='dark'?'selected':''}>Oscuro</option></select></label>
+    `,r=>r.querySelector('#th').addEventListener('change',e=>{S.theme=e.target.value||null;save();render()}))},
+  
+};
+function courseForm(id){
+  const c=S.courses.find(x=>x.id===id)||{};
+  formModal(id?'Editar curso':'Nuevo curso',fld('Nombre del curso','nombre',c.nombre,'required maxlength=100 placeholder="Ej. Matemáticas I"')+fld('Grupo','grupo',c.grupo,'required maxlength=30 placeholder="Ej. 1° A"')+`<label>Descripción<textarea name="descripcion" maxlength="500">${esc(c.descripcion)}</textarea></label>`,f=>{
+    const d={nombre:f.get('nombre').trim(),grupo:f.get('grupo').trim(),descripcion:f.get('descripcion').trim()};
+    if(!d.nombre||!d.grupo)return 'Escribe el nombre y el grupo.';
+    run(id?db.from('courses').update(d).eq('id',id):db.from('courses').insert({...d,owner:S.session.id}),'Curso guardado')},id?'Actualizar':'Guardar');
+}
+function assignForm(id){
+  if(!S.courses.length)return toast('Primero crea un curso.');
+  const a=S.assignments.find(x=>x.id===id)||{courseId:S.courses[0].id,status:'Borrador',due:dayStr(7)};
+  formModal(id?'Editar actividad':'Nueva actividad',fld('Título','title',a.title,'required maxlength=120')+
+    `<label>Curso<select name="courseId">${S.courses.map(c=>`<option value="${c.id}" ${c.id===a.courseId?'selected':''}>${esc(c.nombre)}</option>`).join('')}</select></label>`+
+    fld('Fecha de entrega','due',a.due,'type=date required')+
+    `<label>Estado<select name="status"><option ${a.status==='Borrador'?'selected':''}>Borrador</option><option ${a.status==='Publicado'?'selected':''}>Publicado</option></select></label>`,f=>{
+    const d={title:f.get('title').trim(),courseId:+f.get('courseId'),due:f.get('due'),status:f.get('status')};
+    if(!d.title||!d.due)return 'Escribe el título y la fecha de entrega.';
+    const row={title:d.title,course_id:d.courseId,due:d.due,status:d.status};run(id?db.from('assignments').update(row).eq('id',id):db.from('assignments').insert(row),'Actividad guardada')},id?'Actualizar':'Crear actividad');
+}
+
+/* ===== LOGIN (Supabase Auth) ===== */
+async function start(user){
+  const{data:p,error}=await db.from('profiles').select('nombre,role').eq('id',user.id).single();
+  if(error)return $('#lerr').textContent='No se encontró tu perfil: '+error.message;
+  S.session={id:user.id,email:user.email,role:p.role,name:p.nombre||user.email};
+  await load();commit();
+}
+async function auth(kind){
+  const em=$('#email').value.trim(),pw=$('#pw').value,err=$('#lerr');err.textContent='';
+  if(!db)return err.textContent=dbErr;
+  if(!/^\S+@\S+\.\S+$/.test(em))return err.textContent='Escribe un correo válido.';
+  if(pw.length<6)return err.textContent='La contraseña debe tener al menos 6 caracteres.';
+  if(kind==='up'){
+    const{data,error}=await db.auth.signUp({email:em,password:pw,options:{data:{nombre:em.split('@')[0]}}});
+    if(error)return err.textContent=error.message;
+    if(!data.session)return err.textContent='Cuenta creada. Confirma tu correo e inicia sesión.';
+    return start(data.user);
   }
-  courses.forEach(curso => {
-    const card = document.createElement('div');
-    card.className = 'p-4 border rounded-2xl shadow-sm hover:shadow-md bg-white';
-    const title = document.createElement('h4');
-    title.className = 'font-semibold text-primary mb-1';
-    title.textContent = curso.nombre;
-    const group = document.createElement('p');
-    group.className = 'text-sm text-muted';
-    group.textContent = 'Grupo: ' + curso.grupo;
-    const students = document.createElement('p');
-    students.className = 'text-xs text-muted mt-1';
-    students.textContent = curso.alumnos + ' alumnos';
-    const description = document.createElement('p');
-    description.className = 'text-sm mt-2';
-    description.textContent = curso.descripcion;
-    const actions = document.createElement('div');
-    actions.className = 'mt-3 flex gap-2 flex-wrap';
-    actions.innerHTML = `<button onclick="verCurso(${curso.id})" class="px-3 py-1 border rounded-lg text-sm">Ver</button><button onclick="editarCurso(${curso.id})" class="px-3 py-1 bg-accent text-white rounded-lg text-sm">Editar</button><button onclick="eliminarCurso(${curso.id})" class="px-3 py-1 bg-red-500 text-white rounded-lg text-sm">Eliminar</button>`;
-    card.append(title, group, students, description, actions);
-    container.appendChild(card);
-  });
+  const{data,error}=await db.auth.signInWithPassword({email:em,password:pw});
+  if(error)return err.textContent='Correo o contraseña incorrectos.';
+  start(data.user);
 }
-function verCurso(id) {
-  const curso = courses.find(c => c.id === id);
-  if (!curso) return;
-  document.getElementById('modal-root').innerHTML = `
-    <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
-      <div class="bg-white p-6 rounded-2xl w-full max-w-xl">
-        <h2 class="text-xl font-semibold mb-2">${escapeHTML(curso.nombre)}</h2>
-        <p class="text-sm text-muted">Grupo: ${escapeHTML(curso.grupo)}</p>
-        <p class="text-sm mt-2">${escapeHTML(curso.descripcion)}</p>
-        <div class="mt-4"><h3 class="font-medium">Secciones del curso</h3><ul class="text-sm mt-2 space-y-1"><li>📘 Actividades</li><li>👥 Alumnos: ${Number(curso.alumnos) || 0}</li><li>📊 Calificaciones</li></ul></div>
-        <div class="mt-4 text-right"><button onclick="cerrarModal()" class="px-4 py-2 border rounded-lg">Cerrar</button></div>
-      </div>
-    </div>`;
-}
-document.getElementById('add-course').addEventListener('click', abrirNuevoCurso);
-function abrirNuevoCurso() {
-  navigate('courses');
-  document.getElementById('modal-root').innerHTML = `
-    <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
-      <form id="course-form" class="bg-white p-6 rounded-2xl w-full max-w-md">
-        <h2 class="text-lg font-semibold mb-4">Nuevo curso</h2>
-        <label class="block text-sm mb-1" for="nombreCurso">Nombre del curso</label>
-        <input id="nombreCurso" required maxlength="100" placeholder="Ej. Matemáticas I" class="w-full mb-3 px-3 py-2 border rounded-lg">
-        <label class="block text-sm mb-1" for="grupoCurso">Grupo</label>
-        <input id="grupoCurso" required maxlength="30" placeholder="Ej. 1° A" class="w-full mb-3 px-3 py-2 border rounded-lg">
-        <label class="block text-sm mb-1" for="alumnosCurso">Número de alumnos</label>
-        <input id="alumnosCurso" type="number" required min="0" step="1" value="0" class="w-full mb-3 px-3 py-2 border rounded-lg">
-        <label class="block text-sm mb-1" for="descCurso">Descripción</label>
-        <textarea id="descCurso" maxlength="500" placeholder="Descripción del curso" class="w-full mb-4 px-3 py-2 border rounded-lg"></textarea>
-        <div class="flex justify-end gap-2"><button type="button" onclick="cerrarModal()" class="px-3 py-2 border rounded-lg">Cancelar</button><button type="submit" class="px-3 py-2 bg-accent text-white rounded-lg">Guardar</button></div>
-      </form>
-    </div>`;
-  document.getElementById('course-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const nombre = document.getElementById('nombreCurso').value.trim();
-    const grupo = document.getElementById('grupoCurso').value.trim();
-    const alumnos = Number(document.getElementById('alumnosCurso').value);
-    const descripcion = document.getElementById('descCurso').value.trim();
-    if (!nombre || !grupo || !Number.isInteger(alumnos) || alumnos < 0) {
-      alert('Revisa el nombre, el grupo y el número de alumnos.');
-      return;
-    }
-    courses.push({ id: Date.now(), nombre, grupo, alumnos, descripcion });
-    saveCourses(); cerrarModal(); renderCourses();
-  });
-}
-function editarCurso(id) {
-  const curso = courses.find(c => c.id === id);
-  if (!curso) return;
-  document.getElementById('modal-root').innerHTML = `
-    <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
-      <form id="edit-course-form" class="bg-white p-6 rounded-2xl w-full max-w-md">
-        <h2 class="text-lg font-semibold mb-4">Editar curso</h2>
-        <label class="block text-sm mb-1" for="editNombre">Nombre del curso</label><input id="editNombre" required maxlength="100" value="${escapeHTML(curso.nombre)}" class="w-full mb-3 px-3 py-2 border rounded-lg">
-        <label class="block text-sm mb-1" for="editGrupo">Grupo</label><input id="editGrupo" required maxlength="30" value="${escapeHTML(curso.grupo)}" class="w-full mb-3 px-3 py-2 border rounded-lg">
-        <label class="block text-sm mb-1" for="editAlumnos">Número de alumnos</label><input id="editAlumnos" type="number" min="0" step="1" required value="${Number(curso.alumnos) || 0}" class="w-full mb-3 px-3 py-2 border rounded-lg">
-        <label class="block text-sm mb-1" for="editDesc">Descripción</label><textarea id="editDesc" maxlength="500" class="w-full mb-4 px-3 py-2 border rounded-lg">${escapeHTML(curso.descripcion)}</textarea>
-        <div class="flex justify-end gap-2"><button type="button" onclick="cerrarModal()" class="px-3 py-2 border rounded-lg">Cancelar</button><button type="submit" class="px-3 py-2 bg-accent text-white rounded-lg">Actualizar</button></div>
-      </form>
-    </div>`;
-  document.getElementById('edit-course-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const alumnos = Number(document.getElementById('editAlumnos').value);
-    if (!Number.isInteger(alumnos) || alumnos < 0) { alert('El número de alumnos debe ser un entero igual o mayor que cero.'); return; }
-    curso.nombre = document.getElementById('editNombre').value.trim();
-    curso.grupo = document.getElementById('editGrupo').value.trim();
-    curso.alumnos = alumnos;
-    curso.descripcion = document.getElementById('editDesc').value.trim();
-    saveCourses(); cerrarModal(); renderCourses();
-  });
-}
-function eliminarCurso(id) {
-  const curso = courses.find(c => c.id === id);
-  if (curso && confirm('¿Deseas eliminar el curso "' + curso.nombre + '"?')) {
-    courses = courses.filter(c => c.id !== id);
-    saveCourses(); renderCourses();
-  }
-}
-function cerrarModal() { document.getElementById('modal-root').innerHTML = ''; }
-function escapeHTML(value) {
-  return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-}
+A.signup=()=>auth('up');
+$('#lf').addEventListener('submit',e=>{e.preventDefault();auth('in')});
+(async()=>{
+  if(!db){$('#lerr').textContent=dbErr;return render()}
+  const{data}=await db.auth.getSession();
+  data.session?start(data.session.user):render();
+})();
 </script>
 </body>
 </html>
