@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>EduTrack — Plataforma educativa</title>
+    <meta name="description" content="Plataforma educativa para gestión y evaluación académica." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <section id="login">
+      <h1 class="pr" style="font-size: 34px">EduTrack</h1>
+      <p class="mu">Seguimiento y evaluación del desempeño académico.</p>
+      <form id="lf" class="card" novalidate>
+        <h2 style="font-size: 18px; margin-bottom: 12px">Iniciar sesión</h2>
+        <label
+          >Correo<input
+            id="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="ejemplo@colegio.edu"
+        /></label>
+        <label
+          >Contraseña<input
+            id="pw"
+            type="password"
+            required
+            minlength="6"
+            autocomplete="current-password"
+            placeholder="Mínimo 6 caracteres"
+        /></label>
+        <p id="lerr" class="sm" style="color: var(--er)" role="alert"></p>
+        <div class="row" style="justify-content: flex-start">
+          <button class="p">Entrar</button
+          ><button type="button" data-act="signup">Crear cuenta</button>
+        </div>
+      </form>
+      <p class="sm mu">
+        Las cuentas nuevas son de estudiante. El administrador asigna el rol docente.
+      </p>
+    </section>
+
+    <div id="app" class="hidden">
+      <div id="scrim" class="hidden" data-act="menu"></div>
+      <nav id="nav" aria-label="Principal">
+        <div style="margin-bottom: 18px">
+          <h2 class="pr" style="font-size: 20px">EduTrack</h2>
+          <p class="sm mu" style="margin: 0">Proyect-UAEH · Demo</p>
+        </div>
+        <button data-act="nav" data-id="dashboard">🏠 Dashboard</button>
+        <button class="so" data-act="nav" data-id="progress">🏆 Mi progreso</button>
+        <button data-act="tog" data-id="s1" aria-expanded="false" aria-controls="s1">
+          📚 Clases <span class="ar">▸</span>
+        </button>
+        <div id="s1" class="sub hidden">
+          <button data-act="nav" data-id="courses">Mis clases</button
+          ><button class="t" data-act="newCourse">Nueva clase</button>
+        </div>
+        <button data-act="tog" data-id="s2" aria-expanded="false" aria-controls="s2">
+          📝 Actividades <span class="ar">▸</span>
+        </button>
+        <div id="s2" class="sub hidden">
+          <button data-act="nav" data-id="assignments">Todas las actividades</button
+          ><button class="t" data-act="newAssign">Crear actividad</button>
+        </div>
+        <button data-act="tog" data-id="s3" aria-expanded="false" aria-controls="s3">
+          📊 Reportes <span class="ar">▸</span>
+        </button>
+        <div id="s3" class="sub hidden">
+          <button data-act="nav" data-id="reports">Desempeño académico</button
+          ><button data-act="csv">Exportar CSV</button>
+        </div>
+        <button data-act="tog" data-id="s4" aria-expanded="false" aria-controls="s4">
+          ⚙️ Ajustes <span class="ar">▸</span>
+        </button>
+        <div id="s4" class="sub hidden">
+          <button data-act="settings">Configuración</button
+          ><button data-act="profile">Mi perfil</button>
+        </div>
+      </nav>
+      <div class="mn">
+        <header class="row">
+          <div class="row" style="justify-content: flex-start">
+            <button id="hb" data-act="menu" aria-label="Abrir menú">☰</button>
+            <div>
+              <h1 id="title" style="font-size: 24px">Dashboard</h1>
+              <p class="sm mu" style="margin: 0">
+                Bienvenido, <span id="uname"></span> · <strong id="urole"></strong>
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <button data-act="theme" aria-label="Cambiar tema">🌓</button
+            ><button data-act="out">Cerrar sesión</button>
+          </div>
+        </header>
+        <main id="view" tabindex="-1"></main>
+      </div>
+    </div>
+    <div id="modal"></div>
+    <div id="toasts" aria-live="polite"></div>
+
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/views.js"></script>
+    <script src="js/gamification.js"></script>
+    <script src="js/early-warning.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/actions.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>
