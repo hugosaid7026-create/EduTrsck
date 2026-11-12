@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduTrack — Plataforma educativa</title>
+<meta name="description" content="Plataforma educativa para gestión y evaluación académica.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F8FAFC;--card:#fff;--tx:#1e293b;--mu:#586577;--br:#e2e8f0;--pr:#1E3A8A;--ac:#2563EB;--ok:#15803d;--wa:#b45309;--er:#dc2626}
+[data-theme=dark]{--bg:#0f172a;--card:#1e293b;--tx:#e2e8f0;--mu:#a3b1c6;--br:#334155;--pr:#93c5fd;--ac:#3b82f6}
+*{box-sizing:border-box}
+body{margin:0;font:400 15px/1.5 Poppins,system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+h1,h2,h3,h4{margin:0;font-weight:600}
+.hidden{display:none!important}
+.mu{color:var(--mu)}.sm{font-size:13px}.pr{color:var(--pr)}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{width:100%;padding:8px 12px;border:1px solid var(--br);border-radius:10px;background:var(--card);margin:4px 0 12px}
+input[type=checkbox]{width:auto;margin:0 8px 0 0}
+label{display:block;font-size:13px}
+button{cursor:pointer;padding:7px 14px;border:1px solid var(--br);border-radius:10px;background:var(--card)}
+button:hover{border-color:var(--ac)}
+.p{background:var(--ac);color:#fff;border-color:var(--ac)}.d{background:var(--er);color:#fff;border-color:var(--er)}
+:focus-visible{outline:3px solid #60a5fa;outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:18px}
+.grid{display:grid;gap:16px}.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.end{justify-content:flex-end}
+.big{font-size:32px;font-weight:600;line-height:1.2;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:500;color:var(--mu);font-size:12px;padding-bottom:8px}
+td{padding:10px 8px 10px 0;border-top:1px solid var(--br)}
+.link{background:none;border:0;padding:0;color:var(--ac);text-decoration:underline}
+.b{display:inline-block;padding:1px 10px;border-radius:99px;font-size:12px;border:1px solid currentColor}
+.Abierta{color:var(--ok)}.Borrador{color:var(--mu)}.Cerrada{color:var(--wa)}
+.bar{display:grid;grid-template-columns:120px 1fr 40px;gap:10px;align-items:center;margin:8px 0;font-size:13px}
+.bar div{background:var(--br);border-radius:99px;height:10px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+#login{max-width:440px;margin:0 auto;padding:48px 20px}
+#app{display:flex;min-height:100vh}
+#nav{width:260px;flex-shrink:0;background:var(--card);border-right:1px solid var(--br);padding:16px;position:sticky;top:0;height:100vh;overflow:auto}
+#nav button{display:flex;justify-content:space-between;width:100%;text-align:left;border:0;background:none;margin:2px 0}
+#nav button:hover,#nav [aria-current=page]{background:var(--bg)}
+#nav .sub{margin:0 0 6px 12px;padding-left:10px;border-left:2px solid var(--br)}
+#nav .sub button{padding:5px 10px;font-size:14px}
+.ar{transition:transform .15s}[aria-expanded=true] .ar{transform:rotate(90deg)}
+.mn{flex:1;min-width:0;padding:20px 24px 48px}
+header{margin-bottom:20px}
+#hb{display:none}
+.student .t{display:none!important}
+.ov{position:fixed;inset:0;background:#0007;display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.md{background:var(--card);border-radius:16px;padding:22px;width:100%;max-width:560px;max-height:90vh;overflow:auto}
+#toasts{position:fixed;bottom:16px;right:16px;z-index:60;display:grid;gap:8px}
+.ts{background:var(--pr);color:var(--bg);padding:10px 16px;border-radius:10px}
+@media(max-width:800px){
+#hb{display:inline-block}
+#nav{position:fixed;left:0;top:0;z-index:30;transform:translateX(-100%);transition:transform .2s;visibility:hidden}
+#nav.open{transform:none;visibility:visible}
+#scrim{position:fixed;inset:0;background:#0006;z-index:20}
+.mn{padding:16px}.bar{grid-template-columns:90px 1fr 36px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<section id="login">
+  <h1 class="pr" style="font-size:34px">EduTrack</h1>
+  <p class="mu">Seguimiento y evaluación del desempeño académico.</p>
+  <form id="lf" class="card" novalidate>
+    <h2 style="font-size:18px;margin-bottom:12px">Iniciar sesión</h2>
+    <label>Correo<input id="email" type="email" required autocomplete="email" placeholder="ejemplo@colegio.edu"></label>
+    <p id="lerr" class="sm" style="color:var(--er)" role="alert"></p>
+    <div class="row" style="justify-content:flex-start"><button class="p">Entrar</button><button type="button" data-act="downloadUsersTemplate">Plantilla CSV</button></div>
+  </form>
+  <p class="sm mu">El acceso y el rol se validan con el padrón de usuarios CSV guardado en este navegador. Importa el CSV para iniciar.</p>
+  <div class="card">
+    <label>Importar padrón de usuarios (.csv)<input id="usersCsv" type="file" accept=".csv,text/csv"></label>
+    <button class="p" type="button" data-act="importUsers">Cargar usuarios</button>
+    <p class="sm mu">Columnas requeridas: correo, nombre, rol. Roles válidos: admin, teacher, student. Acceso local sin contraseña.</p>
+  </div>
+</section>
+
+<div id="app" class="hidden">
+  <div id="scrim" class="hidden" data-act="menu"></div>
+  <nav id="nav" aria-label="Principal">
+    <div style="margin-bottom:18px"><h2 class="pr" style="font-size:20px">EduTrack</h2><p class="sm mu" style="margin:0">Proyect-UAEH · Demo</p></div>
+    <button data-act="nav" data-id="dashboard">🏠 Dashboard</button>
+    <button data-act="tog" data-id="s1" aria-expanded="false" aria-controls="s1">📚 Cursos <span class="ar">▸</span></button>
+    <div id="s1" class="sub hidden"><button data-act="nav" data-id="courses">Mis cursos</button><button class="t" data-act="newCourse">Nuevo curso</button></div>
+    <button data-act="tog" data-id="s2" aria-expanded="false" aria-controls="s2">📝 Actividades <span class="ar">▸</span></button>
+    <div id="s2" class="sub hidden"><button data-act="nav" data-id="assignments">Todas las actividades</button><button class="t" data-act="newAssign">Crear actividad</button></div>
+    <button data-act="tog" data-id="s3" aria-expanded="false" aria-controls="s3">📊 Reportes <span class="ar">▸</span></button>
+    <div id="s3" class="sub hidden"><button data-act="nav" data-id="reports">Desempeño académico</button><button data-act="csv">Exportar CSV</button></div>
+    <button data-act="tog" data-id="s4" aria-expanded="false" aria-controls="s4">⚙️ Ajustes <span class="ar">▸</span></button>
+    <div id="s4" class="sub hidden"><button data-act="settings">Configuración</button><button data-act="profile">Mi perfil</button></div>
+  </nav>
+  <div class="mn">
+    <header class="row">
+      <div class="row" style="justify-content:flex-start">
+        <button id="hb" data-act="menu" aria-label="Abrir menú">☰</button>
+        <div><h1 id="title" style="font-size:24px">Dashboard</h1><p class="sm mu" style="margin:0">Bienvenido, <span id="uname"></span> · <strong id="urole"></strong></p></div>
+      </div>
+      <div class="row"><button data-act="theme" aria-label="Cambiar tema">🌓</button><button data-act="out">Cerrar sesión</button></div>
+    </header>
+    <main id="view" tabindex="-1"></main>
+  </div>
+</div>
+<div id="modal"></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+/* ===== ESTADO LOCAL: CSV + almacenamiento del navegador ===== */
+const KEY='edutrack:ui',DATA_KEY='edutrack:data',$=s=>document.querySelector(s);
+const dayStr=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const ui=(()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}})();
+let storageError='';
+const stored=(()=>{try{return JSON.parse(localStorage.getItem(DATA_KEY)||'{}')}catch(e){storageError='No se pudieron leer los datos guardados en este navegador. Importa un respaldo CSV para recuperarlos.';return{}}})();
+let S={session:null,theme:ui.theme||null,route:ui.route||'dashboard',users:stored.users||[],courses:stored.courses||[],students:stored.students||[],assignments:stored.assignments||[],grades:stored.grades||{}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({theme:S.theme,route:S.route}))}catch(e){toast('No se pudieron guardar las preferencias del navegador.')}};
+const saveData=()=>{try{localStorage.setItem(DATA_KEY,JSON.stringify({users:S.users,courses:S.courses,students:S.students,assignments:S.assignments,grades:S.grades}));return true}catch(e){toast('No se pudieron guardar los datos locales. Descarga un respaldo CSV y libera espacio.');return false}};
+const uid=()=>Date.now()+Math.floor(Math.random()*1000);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isAdmin=()=>S.session?.role==='admin';
+const isT=()=>S.session?.role==='teacher'||isAdmin();
+const cname=id=>S.courses.find(c=>c.id===id)?.nombre||'—';
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const fmt=n=>n==null?'—':n.toFixed(1);
+const gOf=aid=>Object.values(S.grades[aid]||{});
+const aAvg=aid=>avg(gOf(aid));
+const cAvg=cid=>avg(S.assignments.filter(a=>a.courseId===cid).flatMap(a=>gOf(a.id)));
+const status=a=>a.status==='Borrador'?'Borrador':a.due<dayStr(0)?'Cerrada':'Abierta';
+const myCids=()=>isT()?S.courses.map(c=>c.id):S.students.filter(s=>s.email?.toLowerCase()===S.session?.email).map(s=>s.courseId);
+const myGrade=a=>{const s=S.students.find(x=>x.courseId===a.courseId&&x.email?.toLowerCase()===S.session?.email);return s?(S.grades[a.id]||{})[s.id]:undefined};
+const vCourses=()=>S.courses.filter(c=>myCids().includes(c.id));
+const vAssign=()=>S.assignments.filter(a=>myCids().includes(a.courseId)&&(isT()||a.status==='Publicado'));
+const commit=msg=>{save();closeModal();render();if(msg)toast(msg)};
+function run(change,msg){
+  const previous={users:S.users,courses:S.courses,students:S.students,assignments:S.assignments,grades:S.grades};
+  change();
+  if(!saveData()){Object.assign(S,previous);return}
+  commit(msg);
+}
+const validEmail=email=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+function parseCSV(text){
+  const rows=[];let row=[],cell='',quoted=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(quoted){
+      if(ch==='"'&&text[i+1]==='"'){cell+='"';i++}
+      else if(ch==='"')quoted=false;
+      else cell+=ch;
+    }else if(ch==='"')quoted=true;
+    else if(ch===','){row.push(cell);cell=''}
+    else if(ch==='\n'||ch==='\r'){
+      if(ch==='\r'&&text[i+1]==='\n')i++;
+      row.push(cell);if(row.some(v=>v.trim()))rows.push(row);
+      row=[];cell='';
+    }else cell+=ch;
+  }
+  if(quoted)throw new Error('El CSV tiene una comilla sin cerrar.');
+  row.push(cell);if(row.some(v=>v.trim()))rows.push(row);
+  return rows;
+}
+const headerKey=value=>String(value||'').replace(/^\uFEFF/,'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+function parseUsersCSV(text){
+  const rows=parseCSV(text);
+  if(rows.length<2)throw new Error('El CSV no contiene usuarios.');
+  const headers=rows[0].map(headerKey),column=names=>headers.findIndex(h=>names.includes(h));
+  const emailCol=column(['email','correo']),nameCol=column(['nombre','name']),roleCol=column(['role','rol']),typeCol=column(['tipo','type']);
+  if(emailCol<0||roleCol<0)throw new Error('El CSV debe incluir las columnas correo/email y rol/role.');
+  const users=[],seen=new Set();
+  for(const row of rows.slice(1)){
+    const kind=typeCol<0?'':headerKey(row[typeCol]);
+    if(typeCol>=0&&!['usuario','user','users'].includes(kind))continue;
+    const email=String(row[emailCol]||'').trim().toLowerCase();
+    const roleRaw=headerKey(row[roleCol]);
+    const role=({admin:'admin',administrador:'admin',teacher:'teacher',docente:'teacher',student:'student',estudiante:'student'})[roleRaw];
+    if(!validEmail(email))throw new Error(`Correo inválido en la fila ${users.length+2}.`);
+    if(!role)throw new Error(`Rol inválido en la fila ${users.length+2}. Usa admin, teacher o student.`);
+    if(seen.has(email))throw new Error(`El correo ${email} está repetido en el CSV.`);
+    seen.add(email);users.push({email,role,nombre:String(row[nameCol]||email).trim()||email});
+  }
+  if(!users.some(user=>user.role==='admin'))throw new Error('El padrón debe incluir al menos un usuario con rol admin.');
+  return users;
+}
+const csvCell=value=>`"${String(value??'').replace(/^([=+\-@])/, "'$1").replace(/"/g,'""')}"`;
+function downloadCSV(filename,rows){
+  const content='\uFEFF'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n');
+  const url=URL.createObjectURL(new Blob([content],{type:'text/csv;charset=utf-8'}));
+  const link=document.createElement('a');link.href=url;link.download=filename;link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+function exportDataCSV(){
+  const headers=['tipo','email','role','nombre','id','grupo','descripcion','courseId','title','due','status','assignmentId','studentId','nota'];
+  const rows=[headers,
+    ...S.users.map(u=>['usuario',u.email,u.role,u.nombre]),
+    ...S.courses.map(c=>['curso','','',c.nombre,c.id,c.grupo,c.descripcion]),
+    ...S.students.map(s=>['alumno',s.email,'',s.nombre,s.id,'','',s.courseId]),
+    ...S.assignments.map(a=>['actividad','','','',a.id,'','',a.courseId,a.title,a.due,a.status]),
+    ...Object.entries(S.grades).flatMap(([assignmentId,grades])=>Object.entries(grades).map(([studentId,nota])=>['calificacion','','','', '', '', '', '', '', '', '',assignmentId,studentId,nota]))
+  ];
+  downloadCSV('respaldo-edutrack.csv',rows);
+}
+function importDataCSV(text){
+  const rows=parseCSV(text);
+  if(rows.length<2)throw new Error('El respaldo CSV está vacío.');
+  const headers=rows[0].map(headerKey),idx=name=>headers.indexOf(headerKey(name));
+  if(idx('tipo')<0)throw new Error('El respaldo debe tener una columna tipo.');
+  const value=(row,name)=>String(row[idx(name)]||'').replace(/^'(?=[=+\-@])/,'');
+  const data={users:[],courses:[],students:[],assignments:[],grades:{}};
+  for(const row of rows.slice(1)){
+    const type=headerKey(value(row,'tipo'));
+    if(type==='usuario'||type==='user'){
+      const email=value(row,'email').trim().toLowerCase(),role=headerKey(value(row,'role'));
+      if(!validEmail(email)||!['admin','teacher','student'].includes(role))throw new Error('El respaldo contiene un usuario inválido.');
+      data.users.push({email,role,nombre:value(row,'nombre')||email});
+    }else if(type==='curso'){
+      data.courses.push({id:Number(value(row,'id')),nombre:value(row,'nombre'),grupo:value(row,'grupo'),descripcion:value(row,'descripcion')});
+    }else if(type==='alumno'){
+      data.students.push({id:Number(value(row,'id')),nombre:value(row,'nombre'),email:value(row,'email').trim().toLowerCase(),courseId:Number(value(row,'courseId'))});
+    }else if(type==='actividad'){
+      data.assignments.push({id:Number(value(row,'id')),title:value(row,'title'),courseId:Number(value(row,'courseId')),due:value(row,'due'),status:value(row,'status')});
+    }else if(type==='calificacion'){
+      const assignmentId=value(row,'assignmentId'),studentId=value(row,'studentId'),grade=Number(value(row,'nota'));
+      if(!(grade>=0&&grade<=10))throw new Error('El respaldo contiene una calificación fuera del rango 0–10.');
+      (data.grades[assignmentId]??={})[studentId]=grade;
+    }
+  }
+  if(!data.users.some(user=>user.role==='admin'))throw new Error('El respaldo debe incluir al menos un usuario admin.');
+  if(data.courses.some(c=>!c.id||!c.nombre||!c.grupo)||data.students.some(s=>!s.id||!data.courses.some(c=>c.id===s.courseId))||data.assignments.some(a=>!a.id||!data.courses.some(c=>c.id===a.courseId)))throw new Error('El respaldo tiene registros incompletos o referencias inválidas.');
+  if(data.assignments.some(a=>!['Borrador','Publicado'].includes(a.status)))throw new Error('El respaldo contiene un estado de actividad inválido.');
+  if(data.assignments.some(a=>Object.keys(data.grades[a.id]||{}).some(studentId=>!data.students.some(student=>String(student.id)===studentId&&student.courseId===a.courseId))))throw new Error('El respaldo contiene calificaciones sin alumno o actividad válida.');
+  S.users=data.users;S.courses=data.courses;S.students=data.students;S.assignments=data.assignments;S.grades=data.grades;
+}
+
+/* ===== UI BASE ===== */
+function toast(m){const t=document.createElement('div');t.className='ts';t.textContent=m;$('#toasts').append(t);setTimeout(()=>t.remove(),3200)}
+let lastFocus;
+function modal(title,body,mount){
+  closeModal(false);lastFocus=document.activeElement;
+  $('#modal').innerHTML=`<div class="ov"><div class="md" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="row"><h2 id="mt" style="font-size:18px">${esc(title)}</h2><button data-act="close" aria-label="Cerrar">✕</button></div><div style="margin-top:12px">${body}</div></div></div>`;
+  mount?.($('#modal'));
+  ($('#modal input,#modal select,#modal textarea')||$('#modal .p')||$('#modal button')).focus();
+}
+function closeModal(back=true){$('#modal').innerHTML='';if(back)lastFocus?.focus?.()}
+function formModal(title,fields,onSubmit,label='Guardar'){
+  modal(title,`<form id="f">${fields}<div class="row end"><button type="button" data-act="close">Cancelar</button><button class="p">${label}</button></div></form>`,r=>
+    r.querySelector('#f').addEventListener('submit',e=>{e.preventDefault();const err=onSubmit(new FormData(e.target));if(err)toast(err)}));
+}
+const fld=(l,n,v='',a='')=>`<label>${l}<input name="${n}" value="${esc(v)}" ${a}></label>`;
+document.addEventListener('keydown',e=>{
+  if(!$('#modal .md'))return;
+  if(e.key==='Escape')return closeModal();
+  if(e.key==='Tab'){const f=[...$('#modal .md').querySelectorAll('button,input,select,textarea')].filter(x=>!x.disabled);
+    if(!f.length)return;const i=f.indexOf(document.activeElement);
+    if(e.shiftKey&&i<=0){e.preventDefault();f.at(-1).focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}
+});
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('ov'))return closeModal();
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const v=b.dataset.id;A[b.dataset.act]?.(/^\d+$/.test(v||'')?+v:v,b);
+});
+
+/* ===== VISTAS ===== */
+const badge=a=>`<span class="b ${status(a)}">${status(a)}</span>`;
+const views={
+dashboard:{t:'Dashboard',f(){
+  const as=vAssign(),cs=vCourses();
+  const al=isT()?S.students.length:cs.length;
+  const prom=isT()?avg(Object.values(S.grades).flatMap(g=>Object.values(g))):avg(as.flatMap(a=>{const g=myGrade(a);return g==null?[]:[g]}));
+  const st=(t,n,s)=>`<div class="card"><h3 style="font-size:15px;font-weight:500">${t}</h3><p class="big">${n}</p><p class="sm mu" style="margin:0">${s}</p></div>`;
+  const rows=[...as].sort((a,b)=>b.due.localeCompare(a.due)).slice(0,5).map(a=>`<tr><td><button class="link" data-act="openAssign" data-id="${a.id}">${esc(a.title)}</button></td><td>${esc(cname(a.courseId))}</td><td>${a.due}</td><td>${badge(a)}</td></tr>`).join('');
+  return `<div class="grid g3" style="margin-bottom:16px">${st(isT()?'Alumnos':'Mis cursos',al,isT()?'En tus cursos':'Inscritos')+st('Actividades',as.length,isT()?`${as.filter(a=>a.status==='Publicado').length} publicadas`:'Publicadas para ti')+st(isT()?'Promedio general':'Mi promedio',fmt(prom),'Escala 0-10')}</div>
+  <div class="grid g2"><div class="card"><div class="row" style="margin-bottom:10px"><h3>Tareas recientes</h3><button class="link t" data-act="newAssign">+ Crear actividad</button></div>${rows?`<div style="overflow-x:auto"><table><thead><tr><th scope="col">Título</th><th scope="col">Curso</th><th scope="col">Entrega</th><th scope="col">Estado</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<p class="mu">Aún no hay actividades.</p>'}</div>
+  <div class="card"><h3 style="margin-bottom:10px">Resumen por grupo</h3>${cs.length?cs.map(c=>`<p style="margin:0 0 10px"><strong>${esc(c.grupo)}</strong> · ${esc(c.nombre)}<br><span class="sm mu">Promedio: ${fmt(cAvg(c.id))} · ${S.students.filter(s=>s.courseId===c.id).length} alumnos</span></p>`).join(''):'<p class="mu">Sin cursos todavía.</p>'}</div></div>`}},
+courses:{t:'Cursos',f(){
+  const cs=vCourses();
+  return `<div class="card"><div class="row" style="margin-bottom:14px"><h3>Mis cursos</h3><button class="p t" data-act="newCourse">+ Nuevo curso</button></div>
+  <div class="grid g3">${cs.length?cs.map(c=>`<div class="card"><h4 class="pr">${esc(c.nombre)}</h4><p class="sm mu" style="margin:0">Grupo: ${esc(c.grupo)} · ${S.students.filter(s=>s.courseId===c.id).length} alumnos</p><p style="margin:8px 0">${esc(c.descripcion)}</p><div class="row" style="justify-content:flex-start"><button data-act="viewCourse" data-id="${c.id}">Ver</button><button class="p t" data-act="editCourse" data-id="${c.id}">Editar</button><button class="d t" data-act="delCourse" data-id="${c.id}">Eliminar</button></div></div>`).join(''):'<p class="mu">Todavía no hay cursos. Usa “Nuevo curso” para agregar uno.</p>'}</div></div>`}},
+assignments:{t:'Actividades',f(){
+  const as=vAssign();
+  return `<div class="card"><div class="row" style="margin-bottom:14px"><h3>Todas las actividades</h3><div class="row"><input id="q" placeholder="Buscar actividad..." aria-label="Buscar actividad" style="margin:0;width:220px"><button class="p t" data-act="newAssign">+ Crear</button></div></div>
+  <div id="ac" class="grid g2">${as.map(a=>`<div class="card" data-s="${esc((a.title+' '+cname(a.courseId)).toLowerCase())}"><h4>${esc(a.title)}</h4><p class="sm mu" style="margin:2px 0 10px">${esc(cname(a.courseId))} · Entrega: ${a.due} ${badge(a)}</p><button data-act="openAssign" data-id="${a.id}">Abrir</button></div>`).join('')}</div>
+  <p id="none" class="mu ${as.length?'hidden':''}">No hay actividades que mostrar.</p></div>`},
+  m(){$('#q').addEventListener('input',e=>{const q=e.target.value.toLowerCase();let n=0;document.querySelectorAll('#ac>[data-s]').forEach(c=>{const h=!c.dataset.s.includes(q);c.classList.toggle('hidden',h);if(!h)n++});$('#none').classList.toggle('hidden',n>0||!$('#ac').children.length&&false)})}},
+reports:{t:'Reportes',f(){
+  return `<div class="card" style="margin-bottom:16px"><h3 style="margin-bottom:10px">Reportes de desempeño</h3><div class="grid g3"><label>Curso<select id="rc"><option value="">Todos</option>${vCourses().map(c=>`<option value="${c.id}" ${rf.c==c.id?'selected':''}>${esc(c.nombre)}</option>`).join('')}</select></label><label>Entrega desde<input type="date" id="rd" value="${rf.from}"></label><div style="align-self:end;margin-bottom:12px"><button class="p" data-act="csv">Descargar CSV</button></div></div></div><div id="rep">${repBody()}</div>`},
+  m(){const u=()=>{rf.c=$('#rc').value;rf.from=$('#rd').value;$('#rep').innerHTML=repBody()};$('#rc').addEventListener('change',u);$('#rd').addEventListener('change',u)}}
+};
+const rf={c:'',from:''};
+const repRows=()=>vAssign().filter(a=>(!rf.c||a.courseId==rf.c)&&(!rf.from||a.due>=rf.from)).sort((a,b)=>a.due.localeCompare(b.due)).map(a=>[a.title,cname(a.courseId),a.due,status(a),isT()?aAvg(a.id):myGrade(a)]);
+function repBody(){
+  const rows=repRows(),bars=vCourses().filter(c=>!rf.c||c.id==rf.c);
+  return `<div class="card" style="margin-bottom:16px"><h3 style="margin-bottom:6px">Promedio por curso</h3>${bars.map(c=>{const v=cAvg(c.id);return `<div class="bar"><span>${esc(c.nombre)}</span><div><i style="width:${(v||0)*10}%"></i></div><b>${fmt(v)}</b></div>`}).join('')||'<p class="mu">Sin cursos.</p>'}</div>
+  <div class="card" style="overflow-x:auto">${rows.length?`<table><thead><tr><th scope="col">Actividad</th><th scope="col">Curso</th><th scope="col">Entrega</th><th scope="col">Estado</th><th scope="col">${isT()?'Promedio':'Mi nota'}</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${r[2]}</td><td>${r[3]}</td><td>${fmt(r[4]??null)}</td></tr>`).join('')}</tbody></table>`:'<p class="mu">No hay datos con estos filtros.</p>'}</div>`;
+}
+
+function render(){
+  const on=!!S.session;
+  document.documentElement.dataset.theme=S.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  $('#login').classList.toggle('hidden',on);$('#app').classList.toggle('hidden',!on);
+  if(!on)return;
+  document.body.classList.toggle('student',!isT());
+  $('#uname').textContent=S.session.name;$('#urole').textContent=isAdmin()?'Administrador':isT()?'Docente':'Estudiante';
+  if(!views[S.route])S.route='dashboard';
+  const R=views[S.route];$('#title').textContent=R.t;$('#view').innerHTML=R.f();R.m?.();
+  document.querySelectorAll('[data-act=nav]').forEach(b=>b.setAttribute('aria-current',b.dataset.id===S.route?'page':'false'));
+}
+
+/* ===== ACCIONES ===== */
+const closeMenu=()=>{$('#nav').classList.remove('open');$('#scrim').classList.add('hidden')};
+const need=()=>isT()||(toast('Solo el docente o el administrador pueden hacer esto.'),false);
+const A={
+  nav(r){S.route=r;save();closeMenu();render()},
+  tog(id,b){const h=document.getElementById(id).classList.toggle('hidden');b.setAttribute('aria-expanded',!h)},
+  menu(){const o=$('#nav').classList.toggle('open');$('#scrim').classList.toggle('hidden',!o)},
+  close(){closeModal()},
+  theme(){S.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';save();render()},
+  
+  out(){S.session=null;closeModal(false);closeMenu();$('#lf').reset();render()},
+  newCourse(){need()&&courseForm()},editCourse(id){need()&&courseForm(id)},
+  delCourse(id){if(!need())return;const c=S.courses.find(x=>x.id===id);
+    if(c&&confirm(`¿Eliminar el curso "${c.nombre}" con sus alumnos, actividades y calificaciones?`)){
+      run(()=>{const studentIds=S.students.filter(s=>s.courseId===id).map(s=>s.id),assignmentIds=S.assignments.filter(a=>a.courseId===id).map(a=>a.id);
+        S.students=S.students.filter(s=>s.courseId!==id);S.assignments=S.assignments.filter(a=>a.courseId!==id);S.courses=S.courses.filter(x=>x.id!==id);
+        studentIds.forEach(studentId=>Object.values(S.grades).forEach(grades=>delete grades[studentId]));
+        assignmentIds.forEach(assignmentId=>delete S.grades[assignmentId])},'Curso eliminado')}},
+  viewCourse(id){const c=S.courses.find(x=>x.id===id);if(!c)return;const st=S.students.filter(s=>s.courseId===id);
+    modal(c.nombre,`<p class="sm mu">Grupo: ${esc(c.grupo)}</p><p>${esc(c.descripcion)}</p><h3 style="font-size:15px;margin:12px 0 6px">Alumnos (${st.length})</h3>
+    ${st.length?`<ul style="padding:0;list-style:none;margin:0">${st.map(s=>`<li class="row" style="padding:4px 0">${esc(s.nombre)}${isT()?`<button class="d" data-act="delStu" data-id="${s.id}" aria-label="Quitar a ${esc(s.nombre)}">Quitar</button>`:''}</li>`).join('')}</ul>`:'<p class="mu">Aún no hay alumnos en este curso.</p>'}
+    ${isT()?`<div class="row" style="margin-top:12px"><input id="ns" placeholder="Nombre del alumno" maxlength="80" aria-label="Nombre del alumno" style="margin:0"><input id="se" type="email" placeholder="Correo (para su acceso)" aria-label="Correo del alumno" style="margin:0"><button class="p" data-act="addStu" data-id="${id}">Agregar</button></div>`:''}`)},
+  addStu(id){if(!need())return;const n=$('#ns').value.trim();if(!n)return toast('Escribe el nombre del alumno.');
+    const em=$('#se').value.trim().toLowerCase()||'';
+    if(em&&!validEmail(em))return toast('Escribe un correo válido.');
+    run(()=>{const studentId=uid();S.students.push({id:studentId,nombre:n,email:em,courseId:id});
+      if(em&&!S.users.some(user=>user.email===em))S.users.push({email:em,nombre:n,role:'student'})},'Alumno guardado');
+    A.viewCourse(id)},
+  delStu(id){if(!need())return;const s=S.students.find(x=>x.id===id);if(!s)return;
+    run(()=>{S.students=S.students.filter(x=>x.id!==id);Object.values(S.grades).forEach(grades=>delete grades[id])},'Alumno eliminado');A.viewCourse(s.courseId)},
+  newAssign(){need()&&assignForm()},editAssign(id){need()&&assignForm(id)},
+  delAssign(id){if(!need())return;const a=S.assignments.find(x=>x.id===id);
+    if(a&&confirm(`¿Eliminar la actividad "${a.title}" y sus calificaciones?`)){run(()=>{S.assignments=S.assignments.filter(x=>x.id!==id);delete S.grades[id]},'Actividad eliminada')}},
+  openAssign(id){const a=S.assignments.find(x=>x.id===id);if(!a)return;
+    const mine=myGrade(a);
+    modal(a.title,`<p class="sm mu">Curso: ${esc(cname(a.courseId))} · Entrega: ${a.due} ${badge(a)}</p>
+    <p>${isT()?`Promedio del grupo: <strong>${fmt(aAvg(id))}</strong> (${gOf(id).length} calificaciones)`:`Mi calificación: <strong>${fmt(mine??null)}</strong>`}</p>
+    ${isT()?`<div class="row end"><button class="d" data-act="delAssign" data-id="${id}">Eliminar</button><button data-act="editAssign" data-id="${id}">Editar</button><button class="p" data-act="grade" data-id="${id}">Registrar calificaciones</button></div>`:''}`)},
+  grade(id){if(!need())return;const a=S.assignments.find(x=>x.id===id);if(!a)return;
+    const st=S.students.filter(s=>s.courseId===a.courseId),g=S.grades[id]||{};
+    if(!st.length)return modal('Calificaciones',`<p class="mu">Este curso no tiene alumnos. Agrégalos desde “Ver” en Mis cursos.</p>`);
+    formModal('Calificaciones · '+a.title,`<table><tbody>${st.map(s=>`<tr><td>${esc(s.nombre)}</td><td><input type="number" name="${s.id}" min="0" max="10" step="0.1" value="${g[s.id]??''}" aria-label="Nota de ${esc(s.nombre)}" style="width:90px;margin:0"></td></tr>`).join('')}</tbody></table><p class="sm mu">Deja vacío si aún no hay nota (0 a 10).</p>`,f=>{
+      const out={};for(const s of st){const v=f.get(String(s.id));if(v==='')continue;const n=Number(v);if(!(n>=0&&n<=10))return 'Ingresa calificaciones entre 0 y 10.';out[s.id]=n}
+      run(()=>{S.grades[id]=out},'Calificaciones guardadas')})},
+  csv(){const q=s=>`"${String(s??'').replace(/^[=+\-@]/,"'$&").replace(/"/g,'""')}"`;
+    const rows=[['Actividad','Curso','Entrega','Estado',isT()?'Promedio':'Mi nota'],...repRows().map(r=>[...r.slice(0,4),r[4]==null?'':r[4].toFixed(1)])];
+    const u=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(q).join(',')).join('\n')],{type:'text/csv;charset=utf-8'}));
+    const a=document.createElement('a');a.href=u;a.download='reporte-edutrack.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),500);toast('CSV descargado')},
+  profile(){modal('Mi perfil',`<p><strong>${esc(S.session.name)}</strong></p><p class="mu">${esc(S.session.email)}<br>Rol: ${isAdmin()?'Administrador':isT()?'Docente':'Estudiante'}</p>`)},
+  settings(){modal('Configuración',`<label>Tema<select id="th"><option value="">Automático</option><option value="light" ${S.theme==='light'?'selected':''}>Claro</option><option value="dark" ${S.theme==='dark'?'selected':''}>Oscuro</option></select></label>
+    ${isAdmin()?`<hr><h3 style="font-size:15px;margin-bottom:8px">Respaldo CSV local</h3><button class="p" data-act="backupCsv">Descargar respaldo completo</button><label style="margin-top:12px">Restaurar respaldo CSV<input id="backupCsv" type="file" accept=".csv,text/csv"></label><button data-act="importBackup">Importar respaldo completo</button><p class="sm mu">El respaldo incluye usuarios, cursos, alumnos, actividades y calificaciones.</p><hr><label>Actualizar padrón de usuarios<input id="usersCsvSettings" type="file" accept=".csv,text/csv"></label><button data-act="importUsers">Cargar padrón CSV</button>`:''}
+    `,r=>r.querySelector('#th').addEventListener('change',e=>{S.theme=e.target.value||null;save();render()}))},
+  downloadUsersTemplate(){downloadCSV('usuarios-edutrack.csv',[['correo','nombre','rol'],['admin@ejemplo.com','Administrador','admin'],['docente@ejemplo.com','Docente','teacher'],['alumno@ejemplo.com','Estudiante','student']]);toast('Plantilla CSV descargada. Sustituye los correos de ejemplo.')},
+  async importUsers(){
+    if(S.session&&!isAdmin())return toast('Solo el administrador puede actualizar el padrón.');
+    const file=$('#usersCsvSettings')?.files?.[0]||$('#usersCsv')?.files?.[0];
+    if(!file)return toast('Selecciona el CSV de usuarios.');
+    try{
+      const users=parseUsersCSV(await file.text()),previous=S.users;
+      S.users=users;
+      if(!saveData()){S.users=previous;return}
+      if(S.session){const current=users.find(user=>user.email===S.session.email);if(!current)S.session=null;else S.session={...S.session,id:current.email,email:current.email,role:current.role,name:current.nombre}}
+      commit('Padrón de usuarios guardado');
+    }catch(error){toast(error.message||'No se pudo leer el CSV de usuarios.')}
+  },
+  backupCsv(){exportDataCSV();toast('Respaldo CSV descargado')},
+  async importBackup(){
+    if(!isAdmin())return toast('Solo el administrador puede restaurar un respaldo.');
+    const file=$('#backupCsv')?.files?.[0];if(!file)return toast('Selecciona el archivo de respaldo CSV.');
+    const previous={users:S.users,courses:S.courses,students:S.students,assignments:S.assignments,grades:S.grades};
+    try{
+      importDataCSV(await file.text());
+      if(!saveData()){Object.assign(S,previous);return}
+      const current=S.users.find(user=>user.email===S.session.email);
+      if(!current){S.session=null}else S.session={...S.session,role:current.role,name:current.nombre};
+      commit('Respaldo restaurado desde CSV');
+    }catch(error){Object.assign(S,previous);toast(error.message||'No se pudo restaurar el respaldo CSV.')}
+  },
+  
+};
+function courseForm(id){
+  const c=S.courses.find(x=>x.id===id)||{};
+  formModal(id?'Editar curso':'Nuevo curso',fld('Nombre del curso','nombre',c.nombre,'required maxlength=100 placeholder="Ej. Matemáticas I"')+fld('Grupo','grupo',c.grupo,'required maxlength=30 placeholder="Ej. 1° A"')+`<label>Descripción<textarea name="descripcion" maxlength="500">${esc(c.descripcion)}</textarea></label>`,f=>{
+    const d={nombre:f.get('nombre').trim(),grupo:f.get('grupo').trim(),descripcion:f.get('descripcion').trim()};
+    if(!d.nombre||!d.grupo)return 'Escribe el nombre y el grupo.';
+    run(()=>{if(id){Object.assign(S.courses.find(x=>x.id===id),d)}else S.courses.push({id:uid(),...d,owner:S.session.id})},'Curso guardado')},id?'Actualizar':'Guardar');
+}
+function assignForm(id){
+  if(!S.courses.length)return toast('Primero crea un curso.');
+  const a=S.assignments.find(x=>x.id===id)||{courseId:S.courses[0].id,status:'Borrador',due:dayStr(7)};
+  formModal(id?'Editar actividad':'Nueva actividad',fld('Título','title',a.title,'required maxlength=120')+
+    `<label>Curso<select name="courseId">${S.courses.map(c=>`<option value="${c.id}" ${c.id===a.courseId?'selected':''}>${esc(c.nombre)}</option>`).join('')}</select></label>`+
+    fld('Fecha de entrega','due',a.due,'type=date required')+
+    `<label>Estado<select name="status"><option ${a.status==='Borrador'?'selected':''}>Borrador</option><option ${a.status==='Publicado'?'selected':''}>Publicado</option></select></label>`,f=>{
+    const d={title:f.get('title').trim(),courseId:+f.get('courseId'),due:f.get('due'),status:f.get('status')};
+    if(!d.title||!d.due)return 'Escribe el título y la fecha de entrega.';
+    run(()=>{if(id){Object.assign(S.assignments.find(x=>x.id===id),d)}else S.assignments.push({id:uid(),...d})},'Actividad guardada')},id?'Actualizar':'Crear actividad');
+}
+
+/* ===== ACCESO LOCAL POR PADRÓN CSV ===== */
+function auth(){
+  const email=$('#email').value.trim().toLowerCase(),err=$('#lerr');err.textContent='';
+  if(!validEmail(email))return err.textContent='Escribe un correo válido.';
+  if(!S.users.length)return err.textContent='Primero importa un padrón CSV con al menos un usuario admin.';
+  const user=S.users.find(item=>item.email===email);
+  if(!user)return err.textContent='Ese correo no aparece en el padrón CSV de este navegador.';
+  S.session={id:user.email,email:user.email,role:user.role,name:user.nombre||user.email};
+  render();
+}
+$('#lf').addEventListener('submit',e=>{e.preventDefault();auth()});
+if(storageError)$('#lerr').textContent=storageError;
+render();
+</script>
+</body>
+</html>
